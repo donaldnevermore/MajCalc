@@ -14,61 +14,28 @@ const Tile: FC<any> = (t) => {
 export const TileInput: FC<{
     notify?: any
 }> = ({ notify }) => {
-    const d = new Array(4).fill({})
-    const [dora, setDora] = useState(d)
-
     const h = new Array(13).fill({})
     const [hand, setHand] = useState(h)
 
-    const [isHand, setFlag] = useState(false)
-    const l = [1, 2, 3, 4, 5, 0, 6, 7, 8, 9]
-    const r = [1, 2, 3, 4, 5, 6, 7]
+    const mps = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    const z = [1, 2, 3, 4, 5, 6, 7]
 
     const [selectedIndexes, setSelectedIndexes] = useState([])
     const [melds, setMelds] = useState([])
 
-    const toggleDora = (i: number) => {
-        if (dora[i].tile) {
-            const newDora = dora.map((v, idx) => {
-                if (idx === i) {
-                    return {}
-                }
-            })
-            setDora(newDora)
-        }
-    }
-
     const toggleHand = (i: number) => {
         if (hand[i].tile) {
-            const newHand = dora.map((v, idx) => {
+            const newHand = hand.map((v, idx) => {
                 if (idx === i) {
                     return {}
                 }
             })
-            setDora(newHand)
+            setHand(newHand)
         }
     }
 
     const add = (s: string) => {
-        if (isHand) {
-            addHand(s)
-            return
-        }
-
-        addDora(s)
-    }
-
-    const addDora = (s: string) => {
-        const idx = dora.findIndex((t) => !t.value)
-        if (idx === -1) {
-            return
-        }
-        const newDora = dora.map((v, i) => {
-            if (i === idx) {
-                v.value = s
-            }
-        })
-        setDora(newDora)
+        addHand(s)
     }
 
     const addHand = (s: string) => {
@@ -86,26 +53,11 @@ export const TileInput: FC<{
 
     const addMeld = (s: string, type: string) => {}
 
-    const press = (v: boolean) => {
-        setFlag(v)
-    }
+    const press = (v: boolean) => {}
 
     return (
         <View>
-            <Button title="宝牌指示牌" color={isHand ? "primary" : "gray"} onPress={() => press(true)} />
-            <View>
-                {dora.map((t, i) => (
-                    <Tile
-                        t={t}
-                        onPress={() => {
-                            toggleDora(i)
-                        }}
-                        key={i}
-                    />
-                ))}
-            </View>
-
-            <Button title="手牌" color={isHand ? "gray" : "primary"} onPress={() => press(false)} />
+            <Text>手牌</Text>
             <View>
                 {hand.map((t, i) => (
                     <Tile
@@ -128,19 +80,19 @@ export const TileInput: FC<{
                 }}
             />
             <View>
-                {l.map((n: number) => (
+                {mps.map((n: number) => (
                     <Tile t={{ value: `${n}m` }} onPress={() => add(`${n}m`)} />
                 ))}
 
-                {l.map((n: number) => (
+                {mps.map((n: number) => (
                     <Tile t={{ value: `${n}p` }} onPress={() => add(`${n}p`)} />
                 ))}
 
-                {l.map((n: number) => (
+                {mps.map((n: number) => (
                     <Tile t={{ value: `${n}s` }} onPress={() => add(`${n}s`)} />
                 ))}
 
-                {r.map((n: number) => (
+                {z.map((n: number) => (
                     <Tile t={{ value: `${n}z` }} onPress={() => add(`${n}z`)} />
                 ))}
             </View>

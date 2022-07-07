@@ -4,6 +4,7 @@ import { ButtonGroup, Avatar, Switch, Divider } from "@rneui/themed"
 
 import { Counter } from "./Counter"
 import { TileInput } from "./TileInput"
+import { gen } from "../lib/gen"
 
 export const Home = () => {
     const [roundWind, setRoundWind] = useState(0)
@@ -12,10 +13,13 @@ export const Home = () => {
     const [honba, setHonba] = useState(0)
     const [richii, setRichii] = useState(0)
     const [tsumo, setTsumo] = useState(0)
+    const [dora, setDora] = useState(0)
     const [ippatsu, setIppatus] = useState(false)
     const [checked, setChecked] = useState(false)
 
     const winds = ["東", "南", "西", "北"]
+
+    console.log(gen())
 
     return (
         <View>
@@ -31,6 +35,9 @@ export const Home = () => {
 
                 <Text>场棒</Text>
                 <Counter n={honba} notify={(n) => setHonba(n)} />
+
+                <Text>宝牌</Text>
+                <Counter n={dora} notify={(n) => setDora(n)} />
 
                 <TileInput />
 

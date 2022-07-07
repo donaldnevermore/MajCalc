@@ -5,17 +5,17 @@ module.exports = {
     plugins: ["@typescript-eslint"],
     overrides: [
         {
-            files: ["*.ts", "*.tsx"],
+            files: ["*.ts", "*.tsx", "*.js", "*.jsx"],
             rules: {
                 "@typescript-eslint/no-shadow": ["warn"],
                 "no-shadow": "off",
                 "no-undef": "off",
 
-                'no-unused-vars': 'warn',
-                '@typescript-eslint/no-unused-vars': 'warn',
-                quotes: ['warn', 'double'],
-                'comma-dangle': ['warn', 'never'],
-                semi: ['warn', 'never'],
+                "no-unused-vars": "warn",
+                "@typescript-eslint/no-unused-vars": "warn",
+                quotes: ["warn", "double"],
+                "comma-dangle": ["warn", "never"],
+                semi: ["warn", "never"]
             }
         }
     ]
