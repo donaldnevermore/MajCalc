@@ -19,7 +19,7 @@ export const Counter: FC<{
     }
 
     return (
-        <View style={styles.wrapper}>
+        <View style={styles.container}>
             <Button disabled={n <= 0} onPress={minus}>
                 -
             </Button>
@@ -30,7 +30,8 @@ export const Counter: FC<{
 }
 
 const styles = StyleSheet.create({
-    wrapper: {
-        display: "flex"
+    container: {
+        flexDirection: "row",
+        flexWrap: "wrap"
     }
 })

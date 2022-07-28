@@ -1,99 +1,190 @@
 import React, { FC, useState } from "react"
 import { StyleSheet, Text, View } from "react-native"
-import { Avatar, Button, ButtonGroup, Image } from "@rneui/themed"
+import { ButtonGroup, Image } from "@rneui/themed"
+import images from "../images/images"
 
-const Tile: FC<any> = (t) => {
+const Tile: FC<any> = ({ t }) => {
+    const src = t && t.type ? img(t) : {}
+
+    return <Image source={src} containerStyle={styles.tile} />
+}
+
+const img = (t: any): any => images[`${t.n}${t.type}`]
+
+const Meld: FC<any> = ({ meld }) => {
+    const arr: any[] = []
+    const tile = meld.tile
+
+    if ((meld.type = "pong")) {
+        arr.push(tile)
+        arr.push(tile)
+        arr.push(tile)
+    }
+    if ((meld.type = "chow")) {
+        arr.push(tile)
+        arr.push({ type: tile.type, n: tile.n + 1 })
+        arr.push({ type: tile.type, n: tile.n + 2 })
+    }
+    if ((meld.type = "kong")) {
+        arr.push(tile)
+        arr.push(tile)
+        arr.push(tile)
+        arr.push(tile)
+    }
+
     return (
-        <Image
-            source={t && t.value ? { uri: `../tile-images/${t.value}.png` } : {}}
-            containerStyle={t && t.focused ? styles.focused : styles.tile}
-        />
+        <>
+            {arr.map((t) => (
+                <Image source={t && t.type ? img(t) : {}} containerStyle={styles.tile} />
+            ))}
+        </>
     )
 }
 
 export const TileInput: FC<{
     notify?: any
 }> = ({ notify }) => {
-    const h = new Array(13).fill({})
-    const [hand, setHand] = useState(h)
+    const h = new Array(14).fill({ type: "", n: 0 })
+    const [hand, setHand] = useState<any[]>(h)
 
     const mps = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     const z = [1, 2, 3, 4, 5, 6, 7]
 
-    const [selectedIndexes, setSelectedIndexes] = useState([])
-    const [melds, setMelds] = useState([])
+    const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+    const [meld, setMeld] = useState<any[]>([])
 
     const toggleHand = (i: number) => {
-        if (hand[i].tile) {
-            const newHand = hand.map((v, idx) => {
-                if (idx === i) {
-                    return {}
-                }
-            })
-            setHand(newHand)
+        hand.splice(i, 1)
+        setHand(hand)
+    }
+
+    const add = (t: any) => {
+        if (selectedIndex == null) {
+            addHand(t)
+            return
         }
+
+        addMeld(t)
     }
 
-    const add = (s: string) => {
-        addHand(s)
-    }
-
-    const addHand = (s: string) => {
-        const idx = hand.findIndex((t) => !t.value)
+    const addHand = (t: any) => {
+        const idx = hand.findIndex((t) => !t.type)
         if (idx === -1) {
             return
         }
-        const newHand = hand.map((v, i) => {
-            if (i === idx) {
-                v.value = s
-            }
-        })
-        setHand(newHand)
+        hand[idx] = t
+        setHand(hand)
     }
 
-    const addMeld = (s: string, type: string) => {}
+    const addPong = (t: any) => {
+        const arr = hand.filter((t) => !t.value)
+        if (13 - arr.length < 3) {
+            return
+        }
+        setHand(hand.slice(0, hand.length - 3))
+        setMeld([
+            ...meld,
+            {
+                type: "pong",
+                tile: t,
+                concealed: false
+            }
+        ])
+    }
 
-    const press = (v: boolean) => {}
+    const addChow = (t: any) => {
+        const arr = hand.filter((t) => !t.value)
+        if (13 - arr.length < 3) {
+            return
+        }
+        setHand(hand.slice(0, hand.length - 3))
+        setMeld([
+            ...meld,
+            {
+                type: "chow",
+                tile: t,
+                concealed: false
+            }
+        ])
+    }
+
+    const addKong = (t: any, concealed: boolean) => {
+        const arr = hand.filter((t) => !t.value)
+        if (13 - arr.length < 3) {
+            return
+        }
+        setHand(hand.slice(0, hand.length - 3))
+        setMeld([
+            ...meld,
+            {
+                type: "kong",
+                tile: t,
+                concealed
+            }
+        ])
+    }
+
+    const addMeld = (t: any) => {
+        switch (selectedIndex) {
+            case 0:
+                addPong(t)
+                break
+            case 1:
+                addChow(t)
+                break
+            case 2:
+                addKong(t, false)
+                break
+            case 3:
+                addKong(t, true)
+                break
+            default:
+                break
+        }
+    }
+
+    const toggleMeld = (i: number) => {
+        meld.splice(i, 1)
+        setMeld(meld)
+    }
 
     return (
         <View>
             <Text>手牌</Text>
             <View>
-                {hand.map((t, i) => (
-                    <Tile
-                        t={t}
-                        onPress={() => {
-                            toggleHand(i)
-                        }}
-                        key={i}
-                    />
-                ))}
+                <View style={styles.container}>
+                    {hand.map((t, i) => (
+                        <Tile t={t} onPress={() => toggleHand(i)} key={i} />
+                    ))}
+                </View>
+                <View style={styles.container}>
+                    {meld.map((t, i) => (
+                        <Tile t={t} onPress={() => toggleMeld(i)} key={i} />
+                    ))}
+                </View>
             </View>
 
             <ButtonGroup
                 buttons={["碰", "吃", "明杠", "暗杠"]}
-                selectMultiple
-                selectedIndexes={selectedIndexes}
-                onPress={(value) => {
-                    const last = value[value.length - 1]
-                    setSelectedIndexes([last as never])
-                }}
+                selectedIndex={selectedIndex}
+                onPress={(value) => setSelectedIndex(value)}
             />
-            <View>
+
+            <View style={styles.container}>
                 {mps.map((n: number) => (
-                    <Tile t={{ value: `${n}m` }} onPress={() => add(`${n}m`)} />
+                    <Tile t={{ type: "m", n: n }} onPress={() => add({ type: "m", n: n })} />
                 ))}
 
                 {mps.map((n: number) => (
-                    <Tile t={{ value: `${n}p` }} onPress={() => add(`${n}p`)} />
+                    <Tile t={{ type: "p", n: n }} onPress={() => add({ type: "p", n: n })} />
                 ))}
 
                 {mps.map((n: number) => (
-                    <Tile t={{ value: `${n}s` }} onPress={() => add(`${n}s`)} />
+                    <Tile t={{ type: "s", n: n }} onPress={() => add({ type: "s", n: n })} />
                 ))}
 
                 {z.map((n: number) => (
-                    <Tile t={{ value: `${n}z` }} onPress={() => add(`${n}z`)} />
+                    <Tile t={{ type: "z", n: n }} onPress={() => add({ type: "z", n: n })} />
                 ))}
             </View>
         </View>
@@ -111,5 +202,9 @@ const styles = StyleSheet.create({
         backgroundColor: "gray",
         width: 81,
         height: 130
+    },
+    container: {
+        flexDirection: "row",
+        flexWrap: "wrap"
     }
 })

@@ -2,7 +2,6 @@ import { generate_result } from "./result"
 import {TableConfig, RuleConfig, HandConfig} from "./config"
 import {Hand} from "./hand"
 
-
 export function gen() {
 const tc: TableConfig = { round: "east", seat: "east", continue: 0, deposit: 0 }
 const hc: HandConfig = {

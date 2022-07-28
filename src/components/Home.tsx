@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react"
 import { StyleSheet, Text, View } from "react-native"
-import { ButtonGroup, Avatar, Switch, Divider } from "@rneui/themed"
+import { ButtonGroup, Switch, Divider, CheckBox } from "@rneui/themed"
 
 import { Counter } from "./Counter"
 import { TileInput } from "./TileInput"
@@ -13,13 +13,21 @@ export const Home = () => {
     const [honba, setHonba] = useState(0)
     const [richii, setRichii] = useState(0)
     const [tsumo, setTsumo] = useState(0)
+
     const [dora, setDora] = useState(0)
     const [ippatsu, setIppatus] = useState(false)
-    const [checked, setChecked] = useState(false)
+    const [afterKan, setAfterKan] = useState(false)
+    const [robbingKan, setRobbingKan] = useState(false)
+    const [under, setUnder] = useState(false)
+    const [blessing, setBlessing] = useState(false)
+
+    const [windFu, setWindFu] = useState(0)
+    const [accumulatedYakuman, setAccumulatedYakuman] = useState(false)
+    const [roundUpMangan, setRoundUpMangan] = useState(false)
+    const [stackingYakuman, setStackingYakuman] = useState(false)
+    const [doubleYakuman, setDoubleYakuman] = useState(false)
 
     const winds = ["東", "南", "西", "北"]
-
-    console.log(gen())
 
     return (
         <View>
@@ -48,23 +56,18 @@ export const Home = () => {
                     onPress={(value) => setRichii(value)}
                 />
 
-                <Text>一发</Text>
-                <Switch value={ippatsu} onValueChange={(value) => setIppatus(value)} />
-
                 <Text>自摸</Text>
                 <ButtonGroup buttons={["荣和", "自摸"]} selectedIndex={tsumo} onPress={(value) => setTsumo(value)} />
 
-                <Text>岭上开花</Text>
-                <Switch value={checked} onValueChange={(value) => setChecked(value)} />
+                <CheckBox title="一发" checked={ippatsu} onPress={() => setIppatus(!ippatsu)} />
 
-                <Text>抢杠</Text>
-                <Switch value={checked} onValueChange={(value) => setChecked(value)} />
+                <CheckBox title="岭上开花" checked={afterKan} onPress={() => setAfterKan(!afterKan)} />
 
-                <Text>海底 / 河底</Text>
-                <Switch value={checked} onValueChange={(value) => setChecked(value)} />
+                <CheckBox title="抢杠" checked={robbingKan} onPress={() => setRobbingKan(!robbingKan)} />
 
-                <Text>{seatWind === 0 ? "天和" : "地和"}</Text>
-                <Switch value={checked} onValueChange={(value) => setChecked(value)} />
+                <CheckBox title="海底 / 河底" checked={under} onPress={() => setUnder(!under)} />
+
+                <CheckBox title="天和 / 地和" checked={blessing} onPress={() => setBlessing(!blessing)} />
             </View>
 
             <Divider />
@@ -72,24 +75,28 @@ export const Home = () => {
             <View>
                 <Text style={styles.subHeader}>规则</Text>
 
-                <Text>切上满贯（基本点 1920 点）</Text>
-                <Switch value={checked} onValueChange={(value) => setChecked(value)} />
-
                 <Text>连风牌雀头</Text>
-                <ButtonGroup
-                    buttons={["2 符", "4 符"]}
-                    selectedIndex={seatWind}
-                    onPress={(value) => setSeatWind(value)}
+                <ButtonGroup buttons={["2 符", "4 符"]} selectedIndex={windFu} onPress={(value) => setWindFu(value)} />
+
+                <CheckBox
+                    title="切上满贯（基本点 1920 点）"
+                    checked={roundUpMangan}
+                    onPress={() => setRoundUpMangan(!roundUpMangan)}
                 />
 
-                <Text>累计役满（13 番以上）</Text>
-                <Switch value={checked} onValueChange={(value) => setChecked(value)} />
+                <CheckBox
+                    title="累计役满（13 番以上）"
+                    checked={accumulatedYakuman}
+                    onPress={() => setAccumulatedYakuman(!accumulatedYakuman)}
+                />
 
-                <Text>复合役满</Text>
-                <Switch value={checked} onValueChange={(value) => setChecked(value)} />
+                <CheckBox
+                    title="复合役满"
+                    checked={stackingYakuman}
+                    onPress={() => setStackingYakuman(!stackingYakuman)}
+                />
 
-                <Text>双倍役满</Text>
-                <Switch value={checked} onValueChange={(value) => setChecked(value)} />
+                <CheckBox title="双倍役满" checked={doubleYakuman} onPress={() => setDoubleYakuman(!doubleYakuman)} />
             </View>
         </View>
     )
