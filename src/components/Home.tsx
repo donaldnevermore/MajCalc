@@ -4,7 +4,7 @@ import { ButtonGroup, Switch, Divider, CheckBox } from "@rneui/themed"
 
 import { Counter } from "./Counter"
 import { TileInput } from "./TileInput"
-import { gen } from "../lib/gen"
+// import { gen } from "../lib/gen"
 
 export const Home = () => {
     const [roundWind, setRoundWind] = useState(0)

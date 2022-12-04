@@ -10,12 +10,12 @@ export const Counter: FC<{
 
     const minus = () => {
         setCount(count - 1)
-        notify(count)
+        notify(count - 1)
     }
 
     const add = () => {
         setCount(count + 1)
-        notify(count)
+        notify(count + 1)
     }
 
     return (
@@ -23,7 +23,7 @@ export const Counter: FC<{
             <Button disabled={n <= 0} onPress={minus}>
                 -
             </Button>
-            <Text>{n}</Text>
+            <Text style={styles.num}>{n}</Text>
             <Button onPress={add}>+</Button>
         </View>
     )
@@ -33,5 +33,10 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
         flexWrap: "wrap"
+    },
+    num: {
+        width: 40,
+        paddingLeft: 15,
+        paddingTop: 10
     }
 })
