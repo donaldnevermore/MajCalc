@@ -7,104 +7,110 @@ import { TileItem } from "./TileItem"
 import { Melds } from "./Melds"
 import { Tile } from "./Tile"
 
-export const TileInput: FC<{}> = () => {
-    const [hand, setHand] = useState<any[]>([])
+export const TileInput: FC<any> = ({ calculate }) => {
+    const [hand, setHand] = useState<TileItem[]>([])
 
     const mps = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     const z = [1, 2, 3, 4, 5, 6, 7]
-    let availableTile = 14
+    const [availableTiles, setAvailableTiles] = useState(14)
 
-    const [selectedIndex, setSelectedIndex] = useState<number>(0)
+    const [selectedIndex, setSelectedIndex] = useState(0)
     const [melds, setMelds] = useState<any[]>([])
 
     const toggleHand = (i: number) => {
         const arr = removeItemAtIndex(hand, i)
         setHand(arr)
+        setAvailableTiles(availableTiles + 1)
     }
 
     const add = (t: TileItem) => {
         if (selectedIndex === 0) {
             addHand(t)
-        } else {
+        }
+        else {
             addMeld(t)
+        }
+
+        if (availableTiles === 0) {
+            calculate(hand, melds)
         }
     }
 
     const addHand = (t: TileItem) => {
-        if (hand.length < availableTile) {
+        if (hand.length < availableTiles) {
             const arr = addItem(hand, t)
             setHand(arr)
         }
     }
 
-    const addPong = (t: TileItem) => {
-        if (availableTile < 3) {
+    const addPon = (t: TileItem) => {
+        if (availableTiles < 3) {
             return
         }
         setMelds(
             addItem(melds, {
-                type: "pong",
-                tile: t,
-                concealed: false
+                type: "pon",
+                tile: t
             })
         )
-        availableTile -= 3
+        setAvailableTiles(availableTiles - 3)
     }
 
-    const addChow = (t: TileItem) => {
-        const arr = hand.filter((tile) => !tile.type)
-        if (13 - arr.length < 3) {
+    const addChii = (t: TileItem) => {
+        if (t.type === "z" || t.n > 7) {
             return
         }
-        setHand(hand.slice(0, hand.length - 3))
+        if (availableTiles < 3) {
+            return
+        }
         setMelds(
             addItem(melds, {
-                type: "chow",
-                tile: t,
-                concealed: false
+                type: "chii",
+                tile: t
             })
         )
+        setAvailableTiles(availableTiles - 3)
     }
 
-    const addKong = (t: TileItem, concealed: boolean) => {
-        const arr = hand.filter((tile) => !tile.type)
-        if (13 - arr.length < 3) {
+    const addKan = (t: TileItem, concealed: boolean) => {
+        if (availableTiles < 3) {
             return
         }
-        setHand(hand.slice(0, hand.length - 3))
         setMelds(
             addItem(melds, {
-                type: "kong",
+                type: "kan",
                 tile: t,
                 concealed
             })
         )
+        setAvailableTiles(availableTiles - 3)
     }
 
     const addMeld = (t: TileItem) => {
         switch (selectedIndex) {
-            case 0:
-                break
-            case 1:
-                addPong(t)
-                break
-            case 2:
-                addChow(t)
-                break
-            case 3:
-                addKong(t, false)
-                break
-            case 4:
-                addKong(t, true)
-                break
-            default:
-                break
+        case 0:
+            break
+        case 1:
+            addPon(t)
+            break
+        case 2:
+            addChii(t)
+            break
+        case 3:
+            addKan(t, false)
+            break
+        case 4:
+            addKan(t, true)
+            break
+        default:
+            break
         }
     }
 
     const toggleMeld = (i: number) => {
         const m = removeItemAtIndex(melds, i)
         setMelds(m)
+        setAvailableTiles(availableTiles + 3)
     }
 
     return (
@@ -117,9 +123,7 @@ export const TileInput: FC<{}> = () => {
                     ))}
                 </View>
 
-                <View style={styles.container}>
-                    <Melds melds={melds} />
-                </View>
+                <Melds melds={melds} handleClick={toggleMeld} />
             </View>
 
             <ButtonGroup

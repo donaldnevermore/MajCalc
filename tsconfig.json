@@ -1,9 +1,4 @@
 {
-    // Recommended React Native TSConfig base
-    "extends": "@tsconfig/react-native/tsconfig.json",
-    "compilerOptions": {
-        // Skip type checking all .d.ts files.
-        "skipLibCheck": true,
-        "noImplicitAny": false
-    }
+    "extends": "@tsconfig/react-native/tsconfig.json"
 }
+  

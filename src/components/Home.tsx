@@ -4,7 +4,8 @@ import { ButtonGroup, Switch, Divider, CheckBox } from "@rneui/themed"
 
 import { Counter } from "./Counter"
 import { TileInput } from "./TileInput"
-// import { gen } from "../lib/gen"
+import { gen } from "../lib/gen"
+import { Result } from "./Result"
 
 export const Home = () => {
     const [roundWind, setRoundWind] = useState(0)
@@ -18,16 +19,42 @@ export const Home = () => {
     const [ippatsu, setIppatus] = useState(false)
     const [afterKan, setAfterKan] = useState(false)
     const [robbingKan, setRobbingKan] = useState(false)
-    const [under, setUnder] = useState(false)
+    const [last, setLast] = useState(false)
     const [blessing, setBlessing] = useState(false)
 
     const [windFu, setWindFu] = useState(0)
     const [accumulatedYakuman, setAccumulatedYakuman] = useState(false)
     const [roundUpMangan, setRoundUpMangan] = useState(false)
-    const [stackingYakuman, setStackingYakuman] = useState(false)
+    const [multipleYakuman, setMultipleYakuman] = useState(false)
     const [doubleYakuman, setDoubleYakuman] = useState(false)
 
+    const [res, setRes] = useState<any>(undefined)
+
     const winds = ["東", "南", "西", "北"]
+
+    const calculate = (hand: any, melds: any) => {
+        const config = {
+            roundWind,
+            seatWind,
+            richiiBets,
+            honba,
+            richii,
+            tsumo,
+            dora,
+            ippatsu,
+            afterKan,
+            robbingKan,
+            last,
+            blessing,
+            windFu,
+            accumulatedYakuman,
+            roundUpMangan,
+            multipleYakuman,
+            doubleYakuman
+        }
+        const res = gen(config, hand, melds)
+        setRes(res)
+    }
 
     return (
         <View>
@@ -47,11 +74,12 @@ export const Home = () => {
                 <Text>宝牌</Text>
                 <Counter n={dora} notify={(n) => setDora(n)} />
 
-                <TileInput />
+                <TileInput calculate={calculate} />
+                <Result res={res} />
 
                 <Text>立直</Text>
                 <ButtonGroup
-                    buttons={["无", "立直", "W立直"]}
+                    buttons={["无", "立直", "W 立直"]}
                     selectedIndex={richii}
                     onPress={(value) => setRichii(value)}
                 />
@@ -65,7 +93,7 @@ export const Home = () => {
 
                 <CheckBox title="抢杠" checked={robbingKan} onPress={() => setRobbingKan(!robbingKan)} />
 
-                <CheckBox title="海底 / 河底" checked={under} onPress={() => setUnder(!under)} />
+                <CheckBox title="海底 / 河底" checked={last} onPress={() => setLast(!last)} />
 
                 <CheckBox title="天和 / 地和" checked={blessing} onPress={() => setBlessing(!blessing)} />
             </View>
@@ -92,8 +120,8 @@ export const Home = () => {
 
                 <CheckBox
                     title="复合役满"
-                    checked={stackingYakuman}
-                    onPress={() => setStackingYakuman(!stackingYakuman)}
+                    checked={multipleYakuman}
+                    onPress={() => setMultipleYakuman(!multipleYakuman)}
                 />
 
                 <CheckBox title="双倍役满" checked={doubleYakuman} onPress={() => setDoubleYakuman(!doubleYakuman)} />
