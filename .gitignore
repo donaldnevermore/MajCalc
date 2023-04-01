@@ -1,5 +1,8 @@
-yarn.lock
+package-lock.json
 pnpm-lock.yaml
+.yarn
+.pnp.cjs
+.pnp.loader.mjs
 
 # OSX
 #

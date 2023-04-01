@@ -9,13 +9,15 @@ export const Counter: FC<{
     const [count, setCount] = useState(n)
 
     const minus = () => {
-        setCount(count - 1)
-        notify(count - 1)
+        const v = count - 1
+        setCount(v)
+        notify(v)
     }
 
     const add = () => {
-        setCount(count + 1)
-        notify(count + 1)
+        const v = count + 1
+        setCount(v)
+        notify(v)
     }
 
     return (

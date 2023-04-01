@@ -5,4 +5,4 @@ export type TileItem = {
     n: number
 }
 
-export const img = (t: TileItem): any => images[`${t.n}${t.type}`]
+export const img = (t: TileItem) => (images as any)[`${t.n}${t.type}`]

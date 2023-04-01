@@ -57,7 +57,7 @@ function convert(data: any): Hand {
 const winds = ["east", "south", "west", "north"]
 const riichiiString = ["none", "riichi", "double-riichi"]
 
-export function gen(config: any, hand: any[], melds: any[]): any {
+export function gen(state: any, hand: any[], melds: any[]): any {
     const {
         roundWind,
         seatWind,
@@ -76,7 +76,7 @@ export function gen(config: any, hand: any[], melds: any[]): any {
         roundUpMangan,
         multipleYakuman,
         doubleYakuman
-    } = config
+    } = state
     const tc: any = { round: winds[roundWind], seat: winds[seatWind], continue: honba, deposit: richiiBets }
     const hc: any = {
         dora,

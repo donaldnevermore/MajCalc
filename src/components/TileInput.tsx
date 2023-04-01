@@ -7,7 +7,13 @@ import { TileItem } from "./TileItem"
 import { Melds } from "./Melds"
 import { Tile } from "./Tile"
 
-export const TileInput: FC<any> = ({ calculate }) => {
+import { useAppSelector, useAppDispatch } from "../redux/hooks"
+import { calculate } from "../redux/mahjong-slice"
+
+export const TileInput: FC<any> = () => {
+    const state = useAppSelector((state) => state.mahjong)
+    const dispatch = useAppDispatch()
+
     const [hand, setHand] = useState<TileItem[]>([])
 
     const mps = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -26,13 +32,12 @@ export const TileInput: FC<any> = ({ calculate }) => {
     const add = (t: TileItem) => {
         if (selectedIndex === 0) {
             addHand(t)
-        }
-        else {
+        } else {
             addMeld(t)
         }
 
         if (availableTiles === 0) {
-            calculate(hand, melds)
+            dispatch(calculate({ hand, melds }))
         }
     }
 

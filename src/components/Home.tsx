@@ -1,101 +1,64 @@
-import React, { FC, useState } from "react"
+import React from "react"
 import { StyleSheet, Text, View } from "react-native"
-import { ButtonGroup, Switch, Divider, CheckBox } from "@rneui/themed"
+import { ButtonGroup, Divider, CheckBox } from "@rneui/themed"
+
+import { useAppSelector, useAppDispatch } from "../redux/hooks"
+import { setSeatWind, setRoundWind, setRiichiBets,
+    setRoundBets, setDora, setRiichi,
+    setTsumo, setIppatsu, setAfterKan,
+    setRobbingKan, setLast, setBlessing,
+    setWindFu, setRoundUpMangan, setAccumulatedYakuman,
+    setMultipleYakuman, setDoubleYakuman
+} from "../redux/mahjong-slice"
 
 import { Counter } from "./Counter"
 import { TileInput } from "./TileInput"
-import { gen } from "../lib/gen"
 import { Result } from "./Result"
 
 export const Home = () => {
-    const [roundWind, setRoundWind] = useState(0)
-    const [seatWind, setSeatWind] = useState(0)
-    const [richiiBets, setRichiiBets] = useState(0)
-    const [honba, setHonba] = useState(0)
-    const [richii, setRichii] = useState(0)
-    const [tsumo, setTsumo] = useState(0)
-
-    const [dora, setDora] = useState(0)
-    const [ippatsu, setIppatus] = useState(false)
-    const [afterKan, setAfterKan] = useState(false)
-    const [robbingKan, setRobbingKan] = useState(false)
-    const [last, setLast] = useState(false)
-    const [blessing, setBlessing] = useState(false)
-
-    const [windFu, setWindFu] = useState(0)
-    const [accumulatedYakuman, setAccumulatedYakuman] = useState(false)
-    const [roundUpMangan, setRoundUpMangan] = useState(false)
-    const [multipleYakuman, setMultipleYakuman] = useState(false)
-    const [doubleYakuman, setDoubleYakuman] = useState(false)
-
-    const [res, setRes] = useState<any>(undefined)
-
-    const winds = ["東", "南", "西", "北"]
-
-    const calculate = (hand: any, melds: any) => {
-        const config = {
-            roundWind,
-            seatWind,
-            richiiBets,
-            honba,
-            richii,
-            tsumo,
-            dora,
-            ippatsu,
-            afterKan,
-            robbingKan,
-            last,
-            blessing,
-            windFu,
-            accumulatedYakuman,
-            roundUpMangan,
-            multipleYakuman,
-            doubleYakuman
-        }
-        const res = gen(config, hand, melds)
-        setRes(res)
-    }
+    const state = useAppSelector((state) => state.mahjong)
+    const dispatch = useAppDispatch()
 
     return (
         <View>
             <View>
                 <Text>场风</Text>
-                <ButtonGroup buttons={winds} selectedIndex={roundWind} onPress={(value) => setRoundWind(value)} />
+                <ButtonGroup buttons={state.winds} selectedIndex={state.roundWind} onPress={(value) => dispatch(setRoundWind(value))} />
 
                 <Text>自风</Text>
-                <ButtonGroup buttons={winds} selectedIndex={seatWind} onPress={(value) => setSeatWind(value)} />
+                <ButtonGroup buttons={state.winds} selectedIndex={state.seatWind} onPress={(value) => dispatch(setSeatWind(value))} />
 
                 <Text>立直棒</Text>
-                <Counter n={richiiBets} notify={(n) => setRichiiBets(n)} />
+                <Counter n={state.riichiBets} notify={(n) => dispatch(setRiichiBets(n))} />
 
                 <Text>场棒</Text>
-                <Counter n={honba} notify={(n) => setHonba(n)} />
+                <Counter n={state.roundBets} notify={(n) => dispatch(setRoundBets(n))} />
 
                 <Text>宝牌</Text>
-                <Counter n={dora} notify={(n) => setDora(n)} />
+                <Counter n={state.dora} notify={(n) => dispatch(setDora(n))} />
 
-                <TileInput calculate={calculate} />
-                <Result res={res} />
+                <TileInput />
+                <Result />
 
                 <Text>立直</Text>
                 <ButtonGroup
                     buttons={["无", "立直", "W 立直"]}
-                    selectedIndex={richii}
-                    onPress={(value) => setRichii(value)}
+                    selectedIndex={state.riichi}
+                    onPress={(value) => dispatch(setRiichi(value))}
                 />
 
                 <Text>自摸</Text>
-                <ButtonGroup buttons={["荣和", "自摸"]} selectedIndex={tsumo} onPress={(value) => setTsumo(value)} />
+                <ButtonGroup buttons={["荣和", "自摸"]} selectedIndex={state.tsumo} onPress={(value) => dispatch(setTsumo(value))} />
 
-                <CheckBox title="一发" checked={ippatsu} onPress={() => setIppatus(!ippatsu)} />
+                <CheckBox title="一发" checked={state.ippatsu} onPress={() => dispatch(setIppatsu())} />
 
-                <CheckBox title="岭上开花" checked={afterKan} onPress={() => setAfterKan(!afterKan)} />
+                <CheckBox title="岭上开花" checked={state.afterKan} onPress={() => dispatch(setAfterKan())} />
 
-                <CheckBox title="抢杠" checked={robbingKan} onPress={() => setRobbingKan(!robbingKan)} />
+                <CheckBox title="抢杠" checked={state.robbingKan} onPress={() => dispatch(setRobbingKan())} />
 
-                <CheckBox title="海底 / 河底" checked={last} onPress={() => setLast(!last)} />
+                <CheckBox title="海底 / 河底" checked={state.last} onPress={() => dispatch(setLast())} />
 
-                <CheckBox title="天和 / 地和" checked={blessing} onPress={() => setBlessing(!blessing)} />
+                <CheckBox title="天和 / 地和" checked={state.blessing} onPress={() => dispatch(setBlessing())} />
             </View>
 
             <Divider />
@@ -104,27 +67,27 @@ export const Home = () => {
                 <Text style={styles.subHeader}>规则</Text>
 
                 <Text>连风牌雀头</Text>
-                <ButtonGroup buttons={["2 符", "4 符"]} selectedIndex={windFu} onPress={(value) => setWindFu(value)} />
+                <ButtonGroup buttons={["2 符", "4 符"]} selectedIndex={state.windFu} onPress={(value) => dispatch(setWindFu(value))} />
 
                 <CheckBox
                     title="切上满贯（基本点 1920 点）"
-                    checked={roundUpMangan}
-                    onPress={() => setRoundUpMangan(!roundUpMangan)}
+                    checked={state.roundUpMangan}
+                    onPress={() => dispatch(setRoundUpMangan())}
                 />
 
                 <CheckBox
                     title="累计役满（13 番以上）"
-                    checked={accumulatedYakuman}
-                    onPress={() => setAccumulatedYakuman(!accumulatedYakuman)}
+                    checked={state.accumulatedYakuman}
+                    onPress={() => dispatch(setAccumulatedYakuman())}
                 />
 
                 <CheckBox
                     title="复合役满"
-                    checked={multipleYakuman}
-                    onPress={() => setMultipleYakuman(!multipleYakuman)}
+                    checked={state.multipleYakuman}
+                    onPress={() => dispatch(setMultipleYakuman())}
                 />
 
-                <CheckBox title="双倍役满" checked={doubleYakuman} onPress={() => setDoubleYakuman(!doubleYakuman)} />
+                <CheckBox title="双倍役满" checked={state.doubleYakuman} onPress={() => dispatch(setDoubleYakuman())} />
             </View>
         </View>
     )
