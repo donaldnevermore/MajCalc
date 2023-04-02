@@ -110,7 +110,12 @@ export const mahjongSlice = createSlice({
         },
         calculate: (state, action: PayloadAction<any>) => {
             const { hand, melds } = action.payload
+            const n = hand.length + melds.length * 3
+            if (n !== 14) {
+                return
+            }
             state.result = gen(state, hand, melds)
+            console.log(state.result)
         }
     }
 })

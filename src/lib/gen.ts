@@ -38,7 +38,7 @@ function convertTile(elem: any): any {
 function convert(data: any): Hand {
     data.legal = data.legal.map(convertTile)
 
-    data.melds = data.meld.map((elem: any) => {
+    data.melds = data.melds.map((elem: any) => {
         switch (elem.type) {
         case "pon":
             return { type: "pong", tile: convertTile(elem.tile) }

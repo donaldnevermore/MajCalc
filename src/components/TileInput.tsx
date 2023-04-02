@@ -30,21 +30,21 @@ export const TileInput: FC<any> = () => {
     }
 
     const add = (t: TileItem) => {
+        console.log(`index ${selectedIndex}`)
         if (selectedIndex === 0) {
             addHand(t)
         } else {
             addMeld(t)
         }
 
-        if (availableTiles === 0) {
-            dispatch(calculate({ hand, melds }))
-        }
+        dispatch(calculate({ hand, melds }))
     }
 
     const addHand = (t: TileItem) => {
-        if (hand.length < availableTiles) {
+        if (availableTiles > 0) {
             const arr = addItem(hand, t)
             setHand(arr)
+            setAvailableTiles(availableTiles - 1)
         }
     }
 
@@ -93,8 +93,6 @@ export const TileInput: FC<any> = () => {
 
     const addMeld = (t: TileItem) => {
         switch (selectedIndex) {
-        case 0:
-            break
         case 1:
             addPon(t)
             break
@@ -113,6 +111,7 @@ export const TileInput: FC<any> = () => {
     }
 
     const toggleMeld = (i: number) => {
+        console.log(`meld ${i}`)
         const m = removeItemAtIndex(melds, i)
         setMelds(m)
         setAvailableTiles(availableTiles + 3)

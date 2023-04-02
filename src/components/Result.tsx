@@ -6,13 +6,20 @@ export const Result: FC<any> = () => {
     const state = useAppSelector((state) => state.mahjong)
 
     if (!state.result) {
-        return <Text>请输入手牌！</Text>
+        return <Text>请输入手牌...</Text>
     }
+
+    const pointSet = state.result.pointSet
+    const yaku = state.result.hora.yaku
 
     return (
         <View>
             <Text>{state.tsumo ? "自摸" : "荣和"}：</Text>
-            <Text>1233</Text>
+            <Text>{pointSet.han} 番 {pointSet.fu} 符</Text>
+            {yaku.map((item: any, i: number) => {
+                return <Text key={i}>{item.name}： { item.point} 番</Text>
+            })}
+
         </View>
     )
 }
