@@ -1,13 +1,13 @@
 export interface TableConfig {
-  round: 'east' | 'south' | 'west' | 'north';
-  seat: 'east' | 'south' | 'west' | 'north';
+  round: "east" | "south" | "west" | "north";
+  seat: "east" | "south" | "west" | "north";
   continue: number;
   deposit: number;
 }
 
 export interface HandConfig {
   dora: number;
-  riichi: 'none' | 'riichi' | 'double-riichi';
+  riichi: "none" | "riichi" | "double-riichi";
   ippatsu: boolean;
   rinshan: boolean;
   chankan: boolean;

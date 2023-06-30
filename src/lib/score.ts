@@ -1,8 +1,8 @@
-import type { RuleConfig, TableConfig } from './config';
-import type { Toitsu } from './deconstructure';
-import { is_dragon_tile, is_tanyao_tile, is_tile } from './tile';
-import { is_yakuman_yaku } from './yaku';
-import type { Hora } from './yaku';
+import type { RuleConfig, TableConfig } from "./config";
+import type { Toitsu } from "./deconstructure";
+import { is_dragon_tile, is_tanyao_tile, is_tile } from "./tile";
+import { is_yakuman_yaku } from "./yaku";
+import type { Hora } from "./yaku";
 
 const mangan = 2000;
 const haneman = 3000;
@@ -10,50 +10,44 @@ const baiman = 4000;
 const sambaiman = 6000;
 const yakuman = 8000;
 
-export type PointSet =
-  | { type: 'yakuman'; point: number }
-  | { type: 'normal'; fu: number; han: number };
+export type PointSet = { type: "yakuman"; point: number } | { type: "normal"; fu: number; han: number };
 
-export const calculate_point_set = (
-  hora: Hora,
-  tableConfig: TableConfig,
-  ruleConfig: RuleConfig
-): PointSet => {
-  if (hora.form === 'kokushi' || hora.yaku.some(y => is_yakuman_yaku(y.name))) {
+export const calculate_point_set = (hora: Hora, tableConfig: TableConfig, ruleConfig: RuleConfig): PointSet => {
+  if (hora.form === "kokushi" || hora.yaku.some((y) => is_yakuman_yaku(y.name))) {
     return {
-      type: 'yakuman',
-      point: hora.yaku.map(y => y.point).reduce((cur, acc) => cur + acc, 0)
+      type: "yakuman",
+      point: hora.yaku.map((y) => y.point).reduce((cur, acc) => cur + acc, 0),
     };
   }
 
   const fu = (() => {
-    if (hora.form === 'chitoitsu') return 25;
-    if (hora.form !== 'mentsu') throw new Error();
+    if (hora.form === "chitoitsu") return 25;
+    if (hora.form !== "mentsu") throw new Error();
 
     let fu = 20;
 
-    hora.parts.forEach(m => {
-      if (m.type === 'kotsu') {
+    hora.parts.forEach((m) => {
+      if (m.type === "kotsu") {
         fu += is_tanyao_tile(m.tile) ? 4 : 8;
       }
     });
-    if (hora.tatsu.type === 'toitsu') {
-      if (hora.type === 'tsumo') fu += is_tanyao_tile(hora.tatsu.tile) ? 4 : 8;
+    if (hora.tatsu.type === "toitsu") {
+      if (hora.type === "tsumo") fu += is_tanyao_tile(hora.tatsu.tile) ? 4 : 8;
       else fu += is_tanyao_tile(hora.tatsu.tile) ? 2 : 4;
     }
 
-    hora.melds.forEach(m => {
-      if (m.type === 'pong') {
+    hora.melds.forEach((m) => {
+      if (m.type === "pong") {
         fu += is_tanyao_tile(m.tile) ? 2 : 4;
-      } else if (m.type === 'kong' && !m.concealed) {
+      } else if (m.type === "kong" && !m.concealed) {
         fu += is_tanyao_tile(m.tile) ? 8 : 16;
-      } else if (m.type === 'kong' && m.concealed) {
+      } else if (m.type === "kong" && m.concealed) {
         fu += is_tanyao_tile(m.tile) ? 16 : 32;
       }
     });
 
     fu += (() => {
-      const toitsu = hora.parts.filter(p => p.type === 'toitsu') as Toitsu[];
+      const toitsu = hora.parts.filter((p) => p.type === "toitsu") as Toitsu[];
       const head = toitsu.length === 1 ? toitsu[0].tile : hora.tile;
 
       let headFu = 0;
@@ -67,22 +61,15 @@ export const calculate_point_set = (
       return headFu;
     })();
 
-    if (
-      is_tile(hora.tatsu) ||
-      hora.tatsu.type === 'kanchan' ||
-      hora.tatsu.type === 'penchan'
-    ) {
+    if (is_tile(hora.tatsu) || hora.tatsu.type === "kanchan" || hora.tatsu.type === "penchan") {
       fu += 2;
     }
 
-    if (
-      hora.melds.every(m => m.type === 'kong' && m.concealed) &&
-      hora.type === 'ron'
-    ) {
+    if (hora.melds.every((m) => m.type === "kong" && m.concealed) && hora.type === "ron") {
       fu += 10;
     }
 
-    if (hora.type === 'tsumo' && !hora.yaku.some(y => y.name === 'pinfu')) {
+    if (hora.type === "tsumo" && !hora.yaku.some((y) => y.name === "pinfu")) {
       fu += 2;
     }
 
@@ -93,22 +80,19 @@ export const calculate_point_set = (
     return 10 * Math.ceil(fu / 10);
   })();
 
-  if (hora.yaku.length > 0 && hora.yaku.every(y => y.name === 'dora')) {
-    return { type: 'normal', fu, han: 0 };
+  if (hora.yaku.length > 0 && hora.yaku.every((y) => y.name === "dora")) {
+    return { type: "normal", fu, han: 0 };
   }
 
   return {
-    type: 'normal',
+    type: "normal",
     fu,
-    han: hora.yaku.map(y => y.point).reduce((acc, cur) => acc + cur, 0)
+    han: hora.yaku.map((y) => y.point).reduce((acc, cur) => acc + cur, 0),
   };
 };
 
-export const calculate_basic_point = (
-  ps: PointSet,
-  ruleConfig: RuleConfig
-): number => {
-  if (ps.type === 'yakuman') {
+export const calculate_basic_point = (ps: PointSet, ruleConfig: RuleConfig): number => {
+  if (ps.type === "yakuman") {
     return yakuman * (ruleConfig.multipleYakuman ? ps.point : 1);
   } else {
     if (ps.han >= 13 && ruleConfig.countedYakuman) return yakuman;

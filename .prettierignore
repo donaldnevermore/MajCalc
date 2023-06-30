@@ -1,0 +1,9 @@
+.vscode/
+out/
+node_modules/
+*.yaml
+.md
+.bundle/
+android/
+ios/
+.watchmanconfig
