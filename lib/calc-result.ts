@@ -45,7 +45,11 @@ function convert(data: any): Hand {
       case "chii":
         return { type: "chow", first: convertTile(elem.tile) };
       case "kan":
-        return { type: "kong", tile: convertTile(elem.tile), concealed: elem.concealed };
+        return {
+          type: "kong",
+          tile: convertTile(elem.tile),
+          concealed: elem.concealed,
+        };
       default:
         throw new Error("Invalid data.");
     }
@@ -57,7 +61,11 @@ function convert(data: any): Hand {
 const winds = ["east", "south", "west", "north"] as const;
 const riichiiString = ["none", "riichi", "double-riichi"] as const;
 
-export function gen(state: MahjongState, hand: TileItem[], melds: MeldItem[]) {
+export function calcResult(
+  state: MahjongState,
+  hand: TileItem[],
+  melds: MeldItem[]
+) {
   const {
     roundWind,
     seatWind,
@@ -77,7 +85,12 @@ export function gen(state: MahjongState, hand: TileItem[], melds: MeldItem[]) {
     multipleYakuman,
     doubleYakuman,
   } = state;
-  const tc: TableConfig = { round: winds[roundWind], seat: winds[seatWind], continue: roundBets, deposit: riichiBets };
+  const tc: TableConfig = {
+    round: winds[roundWind],
+    seat: winds[seatWind],
+    continue: roundBets,
+    deposit: riichiBets,
+  };
   const hc: HandConfig = {
     dora,
     riichi: riichiiString[riichi],
@@ -109,7 +122,10 @@ export function gen(state: MahjongState, hand: TileItem[], melds: MeldItem[]) {
 
   const t = tsumo ? "tsumo" : "ron";
   const a = result.hora.find((elem) => {
-    if (elem.hora.type === t && tile_equals(convertTile(hand[hand.length - 1]), elem.hora.tile)) {
+    if (
+      elem.hora.type === t &&
+      tile_equals(convertTile(hand[hand.length - 1]), elem.hora.tile)
+    ) {
       return elem;
     }
   });

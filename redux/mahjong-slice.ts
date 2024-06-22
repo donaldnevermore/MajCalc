@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-import { gen } from "../lib/gen";
+import { calcResult } from "../lib/calc-result";
 import type { MeldItem } from "../lib/meld-item";
 import type { TileItem } from "../lib/tile-item";
 
@@ -63,62 +63,73 @@ export const mahjongSlice = createSlice({
     // immutable state based off those changes
     setRoundWind: (state, action: PayloadAction<number>) => {
       state.roundWind = action.payload;
+      calculate(state);
     },
     setSeatWind: (state, action: PayloadAction<number>) => {
       state.seatWind = action.payload;
-    },
-    setRiichiBets: (state, action: PayloadAction<number>) => {
-      state.riichiBets = action.payload;
-    },
-    setRoundBets: (state, action: PayloadAction<number>) => {
-      state.roundBets = action.payload;
+      calculate(state);
     },
     setDora: (state, action: PayloadAction<number>) => {
       state.dora = action.payload;
+      calculate(state);
     },
     setRiichi: (state, action: PayloadAction<number>) => {
       state.riichi = action.payload;
+      calculate(state);
     },
     setTsumo: (state, action: PayloadAction<number>) => {
       state.tsumo = action.payload;
+      calculate(state);
     },
     setIppatsu: (state) => {
       state.ippatsu = !state.ippatsu;
+      calculate(state);
     },
     setAfterKan: (state) => {
       state.afterKan = !state.afterKan;
+      calculate(state);
     },
     setRobbingKan: (state) => {
       state.robbingKan = !state.robbingKan;
+      calculate(state);
     },
     setLast: (state) => {
       state.last = !state.last;
+      calculate(state);
     },
     setBlessing: (state) => {
       state.blessing = !state.blessing;
+      calculate(state);
     },
     setWindFu: (state, action: PayloadAction<number>) => {
       state.windFu = action.payload;
+      calculate(state);
     },
     setRoundUpMangan: (state) => {
       state.roundUpMangan = !state.roundUpMangan;
+      calculate(state);
     },
     setAccumulatedYakuman: (state) => {
       state.accumulatedYakuman = !state.accumulatedYakuman;
+      calculate(state);
     },
     setMultipleYakuman: (state) => {
       state.multipleYakuman = !state.multipleYakuman;
+      calculate(state);
     },
     setDoubleYakuman: (state) => {
       state.doubleYakuman = !state.doubleYakuman;
+      calculate(state);
     },
     removeHandTile: (state, action: PayloadAction<number>) => {
       const i = action.payload;
       state.hand.splice(i, 1);
+      state.result = null;
     },
     removeMeldTile: (state, action: PayloadAction<number>) => {
       const i = action.payload;
       state.melds.splice(i, 1);
+      state.result = null;
     },
     addHandMeld: (state, action: PayloadAction<{ i: number; t: TileItem }>) => {
       const { i, t } = action.payload;
@@ -158,23 +169,23 @@ export const mahjongSlice = createSlice({
         }
       }
 
-      // calculate
-      const total = state.hand.length + state.melds.length * 3;
-      if (total !== 14) {
-        return;
-      }
-      const r = gen(state, state.hand, state.melds);
-      console.log(r);
-      state.result = r ?? null;
+      calculate(state);
     },
   },
 });
 
+function calculate(state: MahjongState) {
+  const total = state.hand.length + state.melds.length * 3;
+  if (total !== 14) {
+    return;
+  }
+  const r = calcResult(state, state.hand, state.melds);
+  state.result = r ?? null;
+}
+
 export const {
   setSeatWind,
   setRoundWind,
-  setRiichiBets,
-  setRoundBets,
   setDora,
   setRiichi,
   setTsumo,

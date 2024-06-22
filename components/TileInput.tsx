@@ -7,7 +7,11 @@ import { Melds } from "./Melds";
 import { Tile } from "./Tile";
 
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
-import { addHandMeld, removeHandTile, removeMeldTile } from "../redux/mahjong-slice";
+import {
+  addHandMeld,
+  removeHandTile,
+  removeMeldTile,
+} from "../redux/mahjong-slice";
 
 export const TileInput: FC = () => {
   const state = useAppSelector((state) => state.mahjong);
@@ -35,7 +39,7 @@ export const TileInput: FC = () => {
       <View>
         <View style={styles.container}>
           {state.hand.map((t, i) => (
-            <Tile t={t} handleClick={() => removeHand(i)} key={i} />
+            <Tile tile={t} handleClick={() => removeHand(i)} key={i} />
           ))}
         </View>
 
@@ -50,19 +54,35 @@ export const TileInput: FC = () => {
 
       <View style={styles.container}>
         {mps.map((n: number) => (
-          <Tile t={{ type: "m", n: n }} key={`${n}m`} handleClick={() => addTile({ type: "m", n: n })} />
+          <Tile
+            tile={{ type: "m", n: n }}
+            key={`${n}m`}
+            handleClick={() => addTile({ type: "m", n: n })}
+          />
         ))}
 
         {mps.map((n: number) => (
-          <Tile t={{ type: "p", n: n }} key={`${n}p`} handleClick={() => addTile({ type: "p", n: n })} />
+          <Tile
+            tile={{ type: "p", n: n }}
+            key={`${n}p`}
+            handleClick={() => addTile({ type: "p", n: n })}
+          />
         ))}
 
         {mps.map((n: number) => (
-          <Tile t={{ type: "s", n: n }} key={`${n}s`} handleClick={() => addTile({ type: "s", n: n })} />
+          <Tile
+            tile={{ type: "s", n: n }}
+            key={`${n}s`}
+            handleClick={() => addTile({ type: "s", n: n })}
+          />
         ))}
 
         {z.map((n: number) => (
-          <Tile t={{ type: "z", n: n }} key={`${n}z`} handleClick={() => addTile({ type: "z", n: n })} />
+          <Tile
+            tile={{ type: "z", n: n }}
+            key={`${n}z`}
+            handleClick={() => addTile({ type: "z", n: n })}
+          />
         ))}
       </View>
     </View>

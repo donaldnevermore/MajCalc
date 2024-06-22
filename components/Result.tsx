@@ -14,9 +14,8 @@ export const Result: FC = () => {
 
   return (
     <View style={styles.wrapper}>
-      <Text>{state.tsumo ? "自摸" : "荣和"}：</Text>
       <Text>
-        {pointSet.han} 番 {pointSet.fu} 符
+        {state.tsumo ? "自摸" : "荣和"}，{pointSet.han} 番 {pointSet.fu} 符
       </Text>
       {yaku.map((item: any, i: number) => {
         return (

@@ -50,7 +50,7 @@ export const Melds: FC<{
           <View style={styles.block} key={i}>
             {meld.map((t, j) => (
               <Tile
-                t={t}
+                tile={t}
                 key={`${i}_${j}`}
                 handleClick={() => {
                   handleClick(i);

@@ -5,16 +5,24 @@ import type { TileItem } from "../lib/tile-item";
 import { img } from "../lib/img";
 
 export const Tile: FC<{
-  t: TileItem;
+  tile: TileItem;
   handleClick: () => void;
-}> = ({ t, handleClick }) => {
-  if (!t || !t.type) {
+}> = ({ tile, handleClick }) => {
+  if (!tile || !tile.type) {
     return null;
   }
 
-  const src = img(t);
+  const src = img(tile);
 
-  return <Image source={src} containerStyle={styles.tile} onPress={handleClick} />;
+  return (
+    <Image
+      source={src}
+      containerStyle={styles.tile}
+      resizeMethod="resize"
+      resizeMode="cover"
+      onPress={handleClick}
+    />
+  );
 };
 
 const styles = StyleSheet.create({

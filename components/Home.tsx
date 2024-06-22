@@ -6,8 +6,6 @@ import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import {
   setSeatWind,
   setRoundWind,
-  setRiichiBets,
-  setRoundBets,
   setDora,
   setRiichi,
   setTsumo,
@@ -43,13 +41,11 @@ export const Home = () => {
         />
 
         <Text>自风</Text>
-        <ButtonGroup buttons={winds} selectedIndex={state.seatWind} onPress={(value) => dispatch(setSeatWind(value))} />
-
-        <Text>立直棒</Text>
-        <Counter n={state.riichiBets} notify={(n) => dispatch(setRiichiBets(n))} />
-
-        <Text>场棒</Text>
-        <Counter n={state.roundBets} notify={(n) => dispatch(setRoundBets(n))} />
+        <ButtonGroup
+          buttons={winds}
+          selectedIndex={state.seatWind}
+          onPress={(value) => dispatch(setSeatWind(value))}
+        />
 
         <Text>宝牌</Text>
         <Counter n={state.dora} notify={(n) => dispatch(setDora(n))} />
@@ -71,15 +67,35 @@ export const Home = () => {
           onPress={(value) => dispatch(setTsumo(value))}
         />
 
-        <CheckBox title="一发" checked={state.ippatsu} onPress={() => dispatch(setIppatsu())} />
+        <CheckBox
+          title="一发"
+          checked={state.ippatsu}
+          onPress={() => dispatch(setIppatsu())}
+        />
 
-        <CheckBox title="岭上开花" checked={state.afterKan} onPress={() => dispatch(setAfterKan())} />
+        <CheckBox
+          title="岭上开花"
+          checked={state.afterKan}
+          onPress={() => dispatch(setAfterKan())}
+        />
 
-        <CheckBox title="抢杠" checked={state.robbingKan} onPress={() => dispatch(setRobbingKan())} />
+        <CheckBox
+          title="抢杠"
+          checked={state.robbingKan}
+          onPress={() => dispatch(setRobbingKan())}
+        />
 
-        <CheckBox title="海底 / 河底" checked={state.last} onPress={() => dispatch(setLast())} />
+        <CheckBox
+          title="海底 / 河底"
+          checked={state.last}
+          onPress={() => dispatch(setLast())}
+        />
 
-        <CheckBox title="天和 / 地和" checked={state.blessing} onPress={() => dispatch(setBlessing())} />
+        <CheckBox
+          title="天和 / 地和"
+          checked={state.blessing}
+          onPress={() => dispatch(setBlessing())}
+        />
       </View>
 
       <Divider />
@@ -106,9 +122,17 @@ export const Home = () => {
           onPress={() => dispatch(setAccumulatedYakuman())}
         />
 
-        <CheckBox title="复合役满" checked={state.multipleYakuman} onPress={() => dispatch(setMultipleYakuman())} />
+        <CheckBox
+          title="复合役满"
+          checked={state.multipleYakuman}
+          onPress={() => dispatch(setMultipleYakuman())}
+        />
 
-        <CheckBox title="双倍役满" checked={state.doubleYakuman} onPress={() => dispatch(setDoubleYakuman())} />
+        <CheckBox
+          title="双倍役满"
+          checked={state.doubleYakuman}
+          onPress={() => dispatch(setDoubleYakuman())}
+        />
       </View>
     </View>
   );
