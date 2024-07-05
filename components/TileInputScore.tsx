@@ -1,10 +1,13 @@
 import React, { FC, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { ButtonGroup } from "@rneui/themed";
 
 import type { TileItem } from "../lib/tile-item";
 import { Melds } from "./Melds";
 import { Tile } from "./Tile";
+import { ThemedView } from "./ThemedView";
+import { ThemedText } from "./ThemedText";
+import { Score } from "./Score";
 
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import {
@@ -13,7 +16,7 @@ import {
   removeMeldTile,
 } from "../redux/mahjong-slice";
 
-export const TileInput: FC = () => {
+export const TileInputScore: FC = () => {
   const state = useAppSelector((state) => state.mahjong);
   const dispatch = useAppDispatch();
 
@@ -34,17 +37,19 @@ export const TileInput: FC = () => {
   };
 
   return (
-    <View>
-      <Text>手牌</Text>
-      <View>
-        <View style={styles.container}>
+    <ThemedView>
+      <ThemedText style={styles.center}>{state.hand.length ? "手牌" : "请输入手牌..."}</ThemedText>
+      <ThemedView>
+        <ThemedView style={styles.container}>
           {state.hand.map((t, i) => (
             <Tile tile={t} handleClick={() => removeHand(i)} key={i} />
           ))}
-        </View>
+        </ThemedView>
 
         <Melds melds={state.melds} handleClick={removeMeld} />
-      </View>
+      </ThemedView>
+
+      <Score />
 
       <ButtonGroup
         buttons={["无", "碰", "吃", "明杠", "暗杠"]}
@@ -52,7 +57,7 @@ export const TileInput: FC = () => {
         onPress={(value: number) => setSelectedIndex(value)}
       />
 
-      <View style={styles.container}>
+      <ThemedView style={styles.container}>
         {mps.map((n: number) => (
           <Tile
             tile={{ type: "m", n: n }}
@@ -84,8 +89,8 @@ export const TileInput: FC = () => {
             handleClick={() => addTile({ type: "z", n: n })}
           />
         ))}
-      </View>
-    </View>
+      </ThemedView>
+    </ThemedView>
   );
 };
 
@@ -94,4 +99,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
   },
+  center: {
+    textAlign: "center"
+  }
 });

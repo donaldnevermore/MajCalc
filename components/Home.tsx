@@ -1,6 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { ButtonGroup, Divider, CheckBox } from "@rneui/themed";
+import { StyleSheet } from "react-native";
+import { ButtonGroup, CheckBox } from "@rneui/themed";
+import { ThemedView } from "./ThemedView";
+import { ThemedText } from "./ThemedText";
 
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import {
@@ -22,8 +24,7 @@ import {
 } from "../redux/mahjong-slice";
 
 import { Counter } from "./Counter";
-import { TileInput } from "./TileInput";
-import { Result } from "./Result";
+import { TileInputScore } from "./TileInputScore";
 
 export const Home = () => {
   const state = useAppSelector((state) => state.mahjong);
@@ -31,36 +32,33 @@ export const Home = () => {
   const winds = ["東", "南", "西", "北"];
 
   return (
-    <View>
-      <View>
-        <Text>场风</Text>
+    <ThemedView>
+      <ThemedView>
+        <ThemedText style={styles.subHeader}>场风</ThemedText>
         <ButtonGroup
           buttons={winds}
           selectedIndex={state.roundWind}
           onPress={(value) => dispatch(setRoundWind(value))}
         />
 
-        <Text>自风</Text>
+        <ThemedText style={styles.subHeader}>自风</ThemedText>
         <ButtonGroup
           buttons={winds}
           selectedIndex={state.seatWind}
           onPress={(value) => dispatch(setSeatWind(value))}
         />
 
-        <Text>宝牌</Text>
+        <ThemedText style={styles.subHeader}>宝牌</ThemedText>
         <Counter n={state.dora} notify={(n) => dispatch(setDora(n))} />
 
-        <Result />
-        <TileInput />
+        <TileInputScore />
 
-        <Text>立直</Text>
         <ButtonGroup
           buttons={["无", "立直", "W 立直"]}
           selectedIndex={state.riichi}
           onPress={(value) => dispatch(setRiichi(value))}
         />
 
-        <Text>自摸</Text>
         <ButtonGroup
           buttons={["荣和", "自摸"]}
           selectedIndex={state.tsumo}
@@ -96,16 +94,11 @@ export const Home = () => {
           checked={state.blessing}
           onPress={() => dispatch(setBlessing())}
         />
-      </View>
+      </ThemedView>
 
-      <Divider />
-
-      <View>
-        <Text style={styles.subHeader}>规则</Text>
-
-        <Text>连风牌雀头</Text>
+      <ThemedView>
         <ButtonGroup
-          buttons={["2 符", "4 符"]}
+          buttons={["连风牌雀头 2 符", "连风牌雀头 4 符"]}
           selectedIndex={state.windFu}
           onPress={(value) => dispatch(setWindFu(value))}
         />
@@ -133,16 +126,13 @@ export const Home = () => {
           checked={state.doubleYakuman}
           onPress={() => dispatch(setDoubleYakuman())}
         />
-      </View>
-    </View>
+      </ThemedView>
+    </ThemedView>
   );
 };
 
 const styles = StyleSheet.create({
   subHeader: {
-    backgroundColor: "#2089dc",
-    color: "white",
     textAlign: "center",
-    paddingVertical: 5,
   },
 });

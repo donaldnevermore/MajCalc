@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     flexWrap: "wrap",
+    justifyContent: "center",
   },
   num: {
     width: 40,

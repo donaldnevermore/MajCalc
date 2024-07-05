@@ -1,9 +1,15 @@
 import React, { FC } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import type { TileItem } from "../lib/tile-item";
 import type { MeldItem } from "../lib/meld-item";
 import { Tile } from "./Tile";
+import { ThemedView } from "./ThemedView";
+
+type Obj = {
+  concealed?: boolean;
+  tiles: TileItem[];
+}
 
 export const Melds: FC<{
   melds: MeldItem[];
@@ -13,7 +19,7 @@ export const Melds: FC<{
     return null;
   }
 
-  const arr: TileItem[][] = [];
+  const arr: Obj[] = [];
 
   for (const item of melds) {
     if (item.type === "pon") {
@@ -22,7 +28,7 @@ export const Melds: FC<{
       pon.push(t);
       pon.push(t);
       pon.push(t);
-      arr.push(pon);
+      arr.push({ tiles: pon });
     }
     if (item.type === "chii") {
       const chii: TileItem[] = [];
@@ -30,7 +36,7 @@ export const Melds: FC<{
       chii.push(t);
       chii.push({ type: t.type, n: t.n + 1 });
       chii.push({ type: t.type, n: t.n + 2 });
-      arr.push(chii);
+      arr.push({ tiles: chii });
     }
     if (item.type === "kan") {
       const kan: TileItem[] = [];
@@ -39,16 +45,17 @@ export const Melds: FC<{
       kan.push(t);
       kan.push(t);
       kan.push(t);
-      arr.push(kan);
+
+      arr.push({ concealed: item.concealed, tiles: kan });
     }
   }
 
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.wrap}>
       {arr.map((meld, i) => {
         return (
-          <View style={styles.block} key={i}>
-            {meld.map((t, j) => (
+          <ThemedView style={meld.concealed ? styles.conceal : styles.open} key={i}>
+            {meld.tiles.map((t, j) => (
               <Tile
                 tile={t}
                 key={`${i}_${j}`}
@@ -57,21 +64,32 @@ export const Melds: FC<{
                 }}
               />
             ))}
-          </View>
+          </ThemedView>
         );
       })}
-    </View>
+    </ThemedView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  wrap: {
     flexDirection: "row",
     flexWrap: "wrap",
   },
-  block: {
+  open: {
     flexDirection: "row",
     flexWrap: "wrap",
-    marginRight: 5,
+    borderStyle: "solid",
+    borderColor: "blue",
+    borderWidth: 1,
+    borderRadius: 4,
   },
+  conceal: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    borderStyle: "solid",
+    borderColor: "green",
+    borderWidth: 1,
+    borderRadius: 4,
+  }
 });
