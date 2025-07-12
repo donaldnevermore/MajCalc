@@ -1,8 +1,8 @@
+import { img } from "@/lib/img";
+import type { TileItem } from "@/lib/tile-item";
 import React, { FC } from "react";
 import { Pressable } from "react-native";
 import { Image } from "react-native-ui-lib";
-import { img } from "../lib/img";
-import type { TileItem } from "../lib/tile-item";
 
 export const Tile: FC<{
   tile: TileItem;
@@ -12,14 +12,12 @@ export const Tile: FC<{
     return null;
   }
 
-  const src = img(tile);
-
   return (
     <Pressable onPress={handleClick}>
       <Image
         width={64.8}
         height={104}
-        source={src}
+        source={img(tile)}
         resizeMethod="resize"
         resizeMode="cover"
       />
