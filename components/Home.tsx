@@ -1,26 +1,24 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { ButtonGroup, CheckBox } from "@rneui/themed";
-import { ThemedView } from "./ThemedView";
-import { ThemedText } from "./ThemedText";
+import { Checkbox, SegmentedControl, Text, View } from "react-native-ui-lib";
 
-import { useAppSelector, useAppDispatch } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import {
-  setSeatWind,
-  setRoundWind,
-  setDora,
-  setRiichi,
-  setTsumo,
-  setIppatsu,
-  setAfterKan,
-  setRobbingKan,
-  setLast,
-  setBlessing,
-  setWindFu,
-  setRoundUpMangan,
   setAccumulatedYakuman,
-  setMultipleYakuman,
+  setAfterKan,
+  setBlessing,
+  setDora,
   setDoubleYakuman,
+  setIppatsu,
+  setLast,
+  setMultipleYakuman,
+  setRiichi,
+  setRobbingKan,
+  setRoundUpMangan,
+  setRoundWind,
+  setSeatWind,
+  setTsumo,
+  setWindFu,
 } from "../redux/mahjong-slice";
 
 import { Counter } from "./Counter";
@@ -29,105 +27,103 @@ import { TileInputScore } from "./TileInputScore";
 export const Home = () => {
   const state = useAppSelector((state) => state.mahjong);
   const dispatch = useAppDispatch();
-  const winds = ["東", "南", "西", "北"];
+  const winds = [{ label: "東" }, { label: "南" }, { label: "西" }, { label: "北" }];
 
   return (
-    <ThemedView>
-      <ThemedView>
-        <ThemedText style={styles.subHeader}>场风</ThemedText>
-        <ButtonGroup
-          buttons={winds}
-          selectedIndex={state.roundWind}
-          onPress={(value) => dispatch(setRoundWind(value))}
+    <View>
+      <Text style={styles.subHeader}>场风</Text>
+      <SegmentedControl
+        segments={winds}
+        initialIndex={state.roundWind}
+        onChangeIndex={(value) => dispatch(setRoundWind(value))}
+      />
+
+      <Text style={styles.subHeader}>自风</Text>
+      <SegmentedControl
+        segments={winds}
+        initialIndex={state.seatWind}
+        onChangeIndex={(value) => dispatch(setSeatWind(value))}
+      />
+
+      <Text style={styles.subHeader}>宝牌</Text>
+      <Counter n={state.dora} notify={(n) => dispatch(setDora(n))} />
+
+      <TileInputScore />
+
+      <View gap-s2>
+        <SegmentedControl
+          segments={[{ label: "无" }, { label: "立直" }, { label: "W 立直" }]}
+          initialIndex={state.riichi}
+          onChangeIndex={(value) => dispatch(setRiichi(value))}
         />
 
-        <ThemedText style={styles.subHeader}>自风</ThemedText>
-        <ButtonGroup
-          buttons={winds}
-          selectedIndex={state.seatWind}
-          onPress={(value) => dispatch(setSeatWind(value))}
+        <SegmentedControl
+          segments={[{ label: "荣和" }, { label: "自摸" }]}
+          initialIndex={state.tsumo}
+          onChangeIndex={(value) => dispatch(setTsumo(value))}
         />
 
-        <ThemedText style={styles.subHeader}>宝牌</ThemedText>
-        <Counter n={state.dora} notify={(n) => dispatch(setDora(n))} />
-
-        <TileInputScore />
-
-        <ButtonGroup
-          buttons={["无", "立直", "W 立直"]}
-          selectedIndex={state.riichi}
-          onPress={(value) => dispatch(setRiichi(value))}
+        <Checkbox
+          label="一发"
+          value={state.ippatsu}
+          onValueChange={() => dispatch(setIppatsu())}
         />
 
-        <ButtonGroup
-          buttons={["荣和", "自摸"]}
-          selectedIndex={state.tsumo}
-          onPress={(value) => dispatch(setTsumo(value))}
+        <Checkbox
+          label="岭上开花"
+          value={state.afterKan}
+          onValueChange={() => dispatch(setAfterKan())}
         />
 
-        <CheckBox
-          title="一发"
-          checked={state.ippatsu}
-          onPress={() => dispatch(setIppatsu())}
+        <Checkbox
+          label="抢杠"
+          value={state.robbingKan}
+          onValueChange={() => dispatch(setRobbingKan())}
         />
 
-        <CheckBox
-          title="岭上开花"
-          checked={state.afterKan}
-          onPress={() => dispatch(setAfterKan())}
+        <Checkbox
+          label="海底/河底"
+          value={state.last}
+          onValueChange={() => dispatch(setLast())}
         />
 
-        <CheckBox
-          title="抢杠"
-          checked={state.robbingKan}
-          onPress={() => dispatch(setRobbingKan())}
+        <Checkbox
+          label="天和/地和"
+          value={state.blessing}
+          onValueChange={() => dispatch(setBlessing())}
         />
 
-        <CheckBox
-          title="海底 / 河底"
-          checked={state.last}
-          onPress={() => dispatch(setLast())}
+        <SegmentedControl
+          segments={[{ label: "连风牌雀头 2 符" }, { label: "连风牌雀头 4 符" }]}
+          initialIndex={state.windFu}
+          onChangeIndex={(value) => dispatch(setWindFu(value))}
         />
 
-        <CheckBox
-          title="天和 / 地和"
-          checked={state.blessing}
-          onPress={() => dispatch(setBlessing())}
-        />
-      </ThemedView>
-
-      <ThemedView>
-        <ButtonGroup
-          buttons={["连风牌雀头 2 符", "连风牌雀头 4 符"]}
-          selectedIndex={state.windFu}
-          onPress={(value) => dispatch(setWindFu(value))}
+        <Checkbox
+          label="切上满贯（基本点 1920 点）"
+          value={state.roundUpMangan}
+          onValueChange={() => dispatch(setRoundUpMangan())}
         />
 
-        <CheckBox
-          title="切上满贯（基本点 1920 点）"
-          checked={state.roundUpMangan}
-          onPress={() => dispatch(setRoundUpMangan())}
+        <Checkbox
+          label="累计役满（13 番以上）"
+          value={state.accumulatedYakuman}
+          onValueChange={() => dispatch(setAccumulatedYakuman())}
         />
 
-        <CheckBox
-          title="累计役满（13 番以上）"
-          checked={state.accumulatedYakuman}
-          onPress={() => dispatch(setAccumulatedYakuman())}
+        <Checkbox
+          label="复合役满"
+          value={state.multipleYakuman}
+          onValueChange={() => dispatch(setMultipleYakuman())}
         />
 
-        <CheckBox
-          title="复合役满"
-          checked={state.multipleYakuman}
-          onPress={() => dispatch(setMultipleYakuman())}
+        <Checkbox
+          label="双倍役满"
+          value={state.doubleYakuman}
+          onValueChange={() => dispatch(setDoubleYakuman())}
         />
-
-        <CheckBox
-          title="双倍役满"
-          checked={state.doubleYakuman}
-          onPress={() => dispatch(setDoubleYakuman())}
-        />
-      </ThemedView>
-    </ThemedView>
+      </View>
+    </View>
   );
 };
 

@@ -1,8 +1,8 @@
 import React, { FC } from "react";
-import { StyleSheet } from "react-native";
-import { Image } from "@rneui/themed";
-import type { TileItem } from "../lib/tile-item";
+import { Pressable } from "react-native";
+import { Image } from "react-native-ui-lib";
 import { img } from "../lib/img";
+import type { TileItem } from "../lib/tile-item";
 
 export const Tile: FC<{
   tile: TileItem;
@@ -15,20 +15,14 @@ export const Tile: FC<{
   const src = img(tile);
 
   return (
-    <Image
-      source={src}
-      containerStyle={styles.tile}
-      resizeMethod="resize"
-      resizeMode="cover"
-      onPress={handleClick}
-    />
+    <Pressable onPress={handleClick}>
+      <Image
+        width={64.8}
+        height={104}
+        source={src}
+        resizeMethod="resize"
+        resizeMode="cover"
+      />
+    </Pressable>
   );
 };
-
-const styles = StyleSheet.create({
-  tile: {
-    backgroundColor: "gray",
-    width: 81,
-    height: 130,
-  },
-});

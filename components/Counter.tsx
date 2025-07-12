@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Button } from "@rneui/themed";
+import { StyleSheet } from "react-native";
+import { Button, Text, View } from "react-native-ui-lib";
 
 export const Counter: FC<{
   n: number;
@@ -22,11 +22,9 @@ export const Counter: FC<{
 
   return (
     <View style={styles.container}>
-      <Button disabled={n <= 0} onPress={minus}>
-        -
-      </Button>
+      <Button label="-" disabled={n <= 0} onPress={minus} labelStyle={styles.size} />
       <Text style={styles.num}>{n}</Text>
-      <Button onPress={add}>+</Button>
+      <Button label="+" onPress={add} labelStyle={styles.size} />
     </View>
   );
 };
@@ -38,8 +36,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   num: {
-    width: 40,
-    paddingLeft: 15,
-    paddingTop: 10,
+    width: 50,
+    textAlign: "center",
+    fontSize: 24,
+    padding: 10,
+  },
+  size: {
+    fontSize: 32,
   },
 });
