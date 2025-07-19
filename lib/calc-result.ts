@@ -1,10 +1,10 @@
-import { generate_result } from "./result";
-import { TableConfig, RuleConfig, HandConfig } from "./config";
+import { MahjongState } from "../redux/mahjong-slice";
+import { HandConfig, RuleConfig, TableConfig } from "./config";
 import { Hand } from "./hand";
+import type { MeldItem } from "./meld-item";
+import { generate_result } from "./result";
 import { tile_equals } from "./tile";
 import type { TileItem } from "./tile-item";
-import type { MeldItem } from "./meld-item";
-import { MahjongState } from "../redux/mahjong-slice";
 
 function convertTile(elem: TileItem): any {
   const alpha = elem.type;
@@ -130,4 +130,36 @@ export function calcResult(
     }
   });
   return a;
+}
+
+export function calculateBasicPoint(han: number, fu: number): number {
+  if (han >= 13) return 8000;
+  if (han >= 11) return 6000;
+  if (han >= 8) return 4000;
+  if (han >= 6) return 3000;
+  if (han >= 5) return 2000;
+
+  const bp = fu * Math.pow(2, han + 2);
+  return Math.min(bp, 2000);
+};
+
+export function roundUp(num: number): number {
+  return Math.ceil(num / 100) * 100;
+}
+
+export function calculatePay(basicPoint: number, isRon: boolean, isDealer: boolean): number | string {
+  const roundUpPoint = roundUp(basicPoint);
+
+  let point: number | string;
+  if (isRon) {
+    point = roundUp(basicPoint * (isDealer ? 6 : 4));
+  } else {
+    if (isDealer) {
+      point = `${roundUpPoint * 6}（${roundUpPoint * 2} all）`;
+    } else {
+      point = `${roundUpPoint * 4}（${roundUpPoint * 2}-${roundUpPoint}）`;
+    }
+  }
+
+  return point;
 }
